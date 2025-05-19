@@ -43,7 +43,7 @@ export async function POST(request) {
 }
 
 // Handle GET requests (e.g., for checking authentication status)
-export async function GET() {
+export function GET() {
   return NextResponse.json({
     message: 'Authentication endpoint is working'
   });
