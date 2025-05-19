@@ -7,6 +7,10 @@ export async function POST(request) {
     const body = await request.json();
     const { username, password } = body;
 
+    console.log('Received login request:', body);
+    // Log the request method and URL for debugging
+    console.log('Request method:', request.method);
+
     // Simple validation
     if (!username || !password) {
       return NextResponse.json(
