@@ -4,6 +4,32 @@ import { useState } from 'react';
 
 export default function Counter(props) {
     const [count, setCount] = useState(0);
+    const [isIncrementing, setIsIncrementing] = useState(false);
+
+    async function handleIncrement() {
+        setIsIncrementing(true);
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate async operation
+        setCount(count + 1);
+        setIsIncrementing(false);
+
+        try {   
+            const response = await fetch('/api/counter/increment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ count: count + 1 }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        } catch (error) {
+            console.error('Error incrementing count:', error);
+        }  finally {
+            setIsIncrementing(false);
+        } 
+    }
 
     return (
         <div className="flex flex-col items-center gap-2 p-4 border rounded-lg shadow-sm">

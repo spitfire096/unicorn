@@ -1,8 +1,35 @@
 import Image from "next/image";
 import Counter from '../component/Counter'
 import Link from 'next/link';
+import { clientPromise } from "@/libs/mongo";
 
 export default function Home() {
+   const [isIncrementing, setIsIncrementing] = useState(false);
+   async function handleIncrement() {
+        setIsIncrementing(true);
+        await new Promise(resolve => setTimeout(resolve, 1000)); // Simulate async operation
+        setCount(count + 1);
+        setIsIncrementing(false);
+
+        try {   
+            const response = await fetch('/api/counter/increment', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ count: count + 1 }),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+        } catch (error) {
+            console.error('Error incrementing count:', error);
+        }  finally {
+            setIsIncrementing(false);
+        } 
+    }
+    
   return (
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       {/* Navigation */}
